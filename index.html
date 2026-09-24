@@ -3,379 +3,99 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lernpfad Fruchtverbreitung</title>
+  <title>Quiz mit Feedback</title>
   <style>
-    :root {
-      --primary: #2e7d32;
-      --primary-hover: #1b5e20;
-      --bg: #f4f6f4;
-      --card-bg: #ffffff;
-      --text: #2c3e50;
-      --accent: #e8f5e9;
-      --error-bg: #ffebee;
-      --error-border: #c62828;
-    }
-
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      margin: 0;
-      padding: 20px;
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 0 15px;
     }
-
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      background: var(--card-bg);
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 25px;
-      border-bottom: 2px solid var(--accent);
-      padding-bottom: 15px;
-    }
-
-    h1 {
-      color: var(--primary);
-      margin: 0 0 10px 0;
-      font-size: 1.8rem;
-    }
-
-    .progress-bar {
-      height: 10px;
-      background: #e0e0e0;
-      border-radius: 10px;
-      overflow: hidden;
-      margin-bottom: 25px;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: var(--primary);
-      width: 0%;
-      transition: width 0.3s ease;
-    }
-
-    .station-card {
-      display: none;
-    }
-
-    .station-card.active {
-      display: block;
-    }
-
-    .media-container {
-      text-align: center;
-      margin: 20px 0;
-    }
-
-    .media-container img {
-      max-width: 100%;
-      max-height: 300px;
-      border-radius: 8px;
-      object-fit: cover;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    .task-box {
-      background: var(--accent);
-      padding: 20px;
-      border-radius: 8px;
-      margin: 20px 0;
-      border-left: 5px solid var(--primary);
-    }
-
-    .options-grid {
-      display: grid;
-      gap: 10px;
-      margin-top: 15px;
-    }
-
-    button.option-btn {
-      background: white;
-      border: 2px solid #ccc;
-      padding: 12px 15px;
+    .question-block {
+      margin-bottom: 20px;
+      padding: 15px;
+      border: 1px solid #ccc;
       border-radius: 6px;
-      cursor: pointer;
-      font-size: 1rem;
-      text-align: left;
-      transition: all 0.2s ease;
-      color: var(--text);
     }
-
-    button.option-btn:hover:not(:disabled) {
-      border-color: var(--primary);
-      background: #f9f9f9;
-    }
-
-    button.option-btn.correct {
-      background: #c8e6c9 !important;
-      border-color: #2e7d32 !important;
-      color: #1b5e20;
+    .feedback {
+      margin-top: 10px;
+      padding: 8px 12px;
+      border-radius: 4px;
       font-weight: bold;
-    }
-
-    button.option-btn.wrong {
-      background: var(--error-bg) !important;
-      border-color: var(--error-border) !important;
-      color: #b71c1c;
-      opacity: 0.7;
-    }
-
-    .feedback-box {
-      margin-top: 15px;
-      padding: 12px;
-      border-radius: 6px;
       display: none;
-      font-weight: 500;
     }
-
-    .feedback-box.correct-fb {
-      display: block;
-      background: #d4edda;
+    .feedback.correct {
+      background-color: #d4edda;
       color: #155724;
-      border: 1px solid #c3e6cb;
-    }
-
-    .feedback-box.wrong-fb {
       display: block;
-      background: #f8d7da;
+    }
+    .feedback.incorrect {
+      background-color: #f8d7da;
       color: #721c24;
-      border: 1px solid #f5c6cb;
+      display: block;
     }
-
-    .nav-buttons {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 30px;
-    }
-
-    .btn {
-      background: var(--primary);
-      color: white;
-      border: none;
+    button {
       padding: 10px 20px;
-      border-radius: 6px;
+      font-size: 16px;
       cursor: pointer;
-      font-size: 1rem;
-      font-weight: 600;
-    }
-
-    .btn:hover {
-      background: var(--primary-hover);
-    }
-
-    .btn:disabled {
-      background: #ccc;
-      cursor: not-allowed;
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <header>
-      <h1>Lernpfad: Verbreitungsformen von Früchten und Samen</h1>
-      <p>Erkunde die verschiedenen Strategien der Pflanzen zur Ausbreitung.</p>
-    </header>
+  <h2>Wissens-Quiz</h2>
 
-    <div class="progress-bar">
-      <div class="progress-fill" id="progress"></div>
+  <form id="quizForm">
+    <!-- Frage 1 -->
+    <div class="question-block" data-correct="b" data-hint="Hinweis: Fotosynthese findet hauptsächlich in den Blättern statt.">
+      <p><strong>1. Wo findet bei Pflanzen die Fotosynthese primär statt?</strong></p>
+      <label><input type="radio" name="q1" value="a"> Wurzeln</label><br>
+      <label><input type="radio" name="q1" value="b"> Blätter</label><br>
+      <label><input type="radio" name="q1" value="c"> Blüten</label>
+      <div class="feedback"></div>
     </div>
 
-    <div id="app">
-      <!-- Inhalte werden dynamisch via JavaScript gerendert -->
+    <!-- Frage 2 -->
+    <div class="question-block" data-correct="a" data-hint="Hinweis: Überlege, welches Gas für die ZAtmung aufgenommen wird.">
+      <p><strong>2. Welches Gas nehmen Pflanzen für die Fotosynthese auf?</strong></p>
+      <label><input type="radio" name="q2" value="a"> Kohlendioxid</label><br>
+      <label><input type="radio" name="q2" value="b"> Sauerstoff</label><br>
+      <label><input type="radio" name="q2" value="c"> Stickstoff</label>
+      <div class="feedback"></div>
     </div>
 
-    <div class="nav-buttons">
-      <button class="btn" id="prev-btn" onclick="changeStation(-1)" disabled>Zurück</button>
-      <button class="btn" id="next-btn" onclick="changeStation(1)">Weiter</button>
-    </div>
-  </div>
+    <button type="submit">Antworten prüfen</button>
+  </form>
 
   <script>
-    // Beispiel-Bilder
-    const AHORN_IMG = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80";
-    const BEEREN_IMG = "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?auto=format&fit=crop&w=600&q=80";
-    const KOKOSNUSS_IMG = "https://images.unsplash.com/photo-1543716627-839b54c40519?auto=format&fit=crop&w=600&q=80";
-    const LOEWENZAHN_FLY_IMG = "https://images.unsplash.com/photo-1533038590840-1cde6e668a91?auto=format&fit=crop&w=600&q=80";
+    document.getElementById('quizForm').addEventListener('submit', function(event) {
+      // Verhindert das Neuladen der Seite und das Hochspringen nach oben
+      event.preventDefault();
 
-    // Stationen-Daten mit individuellen Rückmeldungen / Tipps für jede Antwort
-    const stationen = [
-      {
-        title: "Station 1: Windverbreitung (Anemochorie)",
-        img: AHORN_IMG,
-        imgAlt: "Ahornsamen mit Flügeln",
-        text: "Manche Pflanzen nutzen den Wind, um ihre Samen über weite Strecken zu transportieren. Diese Samen besitzen oft spezielle Flugeinrichtungen wie Flügel oder Haarkronen.",
-        question: "Welche Ausstattungsmerkmale helfen Samen bei der Windverbreitung?",
-        options: [
-          { 
-            text: "Saftiges Fruchtfleisch und auffällige Farben", 
-            correct: false, 
-            feedback: "💡 Tipp: Bunte Farben und saftiges Fleisch locken eher Tiere an, die die Frucht fressen. Der Wind braucht etwas Leichtes!" 
-          },
-          { 
-            text: "Geringes Gewicht, Flügel oder Fallschirme", 
-            correct: true, 
-            feedback: "Richtig! Durch das geringe Gewicht und die große Fläche kann der Wind die Samen weit tragen." 
-          },
-          { 
-            text: "Wasserdichte Hülle und Hohlräume", 
-            correct: false, 
-            feedback: "💡 Tipp: Eine wasserdichte Hülle hilft beim Schwimmen im Wasser, nützt dem Wind aber wenig." 
-          }
-        ]
-      },
-      {
-        title: "Station 2: Tierverbreitung (Zoochorie)",
-        img: BEEREN_IMG,
-        imgAlt: "Beeren an einem Strauch",
-        text: "Viele Pflanzen locken Tiere mit schmackhaften Früchten an. Die Samen werden entweder gefressen und unverdaut ausgeschieden oder bleiben mit Kletten im Fell hängen.",
-        question: "Wie verbreiten Eichhörnchen beispielsweise die Samen der Haselnuss?",
-        options: [
-          { 
-            text: "Sie fressen die Schale und spucken den Kern aus.", 
-            correct: false, 
-            feedback: "💡 Tipp: Eichhörnchen fressen genau den nahrhaften Kern! Bedenke, was sie für den Winter vorbereiten." 
-          },
-          { 
-            text: "Sie vergraben Nüsse als Vorrat und vergessen einige davon.", 
-            correct: true, 
-            feedback: "Richtig! Aus den vergrabenen und vergesellschafteten Nüssen können im Frühjahr neue Bäume wachsen." 
-          },
-          { 
-            text: "Die Nüsse bleiben an ihrem Fell kleben.", 
-            correct: false, 
-            feedback: "💡 Tipp: Glatte Haselnüsse haben keine Widerhaken oder Kletten. Sie bleiben nicht im Fell haften." 
-          }
-        ]
-      },
-      {
-        title: "Station 3: Wasserverbreitung (Hydrochorie)",
-        img: KOKOSNUSS_IMG,
-        imgAlt: "Kokosnuss am Strand",
-        text: "Pflanzen an Gewässern nutzen Strömungen zur Ausbreitung. Ihre Früchte müssen schwimmfähig und gegen Wasser geschützt sein.",
-        question: "Was macht die Kokosnuss perfekt für die Wasserverbreitung?",
-        options: [
-          { 
-            text: "Eine luftgefüllte, faserige Hülle, die Auftrieb gibt.", 
-            correct: true, 
-            feedback: "Richtig! Die faserige Hülle schließt Luft ein und sorgt dafür, dass die schwere Nuss monatelang im Meer schwimmen kann." 
-          },
-          { 
-            text: "Kleine Flügel an der Außenseite.", 
-            correct: false, 
-            feedback: "💡 Tipp: Flügel nützen im Wasser nichts und würden die Nuss nur bremsen." 
-          },
-          { 
-            text: "Süßer Saft, der Fische anlockt.", 
-            correct: false, 
-            feedback: "💡 Tipp: Fische fressen keine Kokosnüsse. Es geht darum, über das Wasser an neue Strände zu gelangen." 
-          }
-        ]
-      },
-      {
-        title: "Abschluss: Übersicht & Auswertung",
-        img: LOEWENZAHN_FLY_IMG,
-        imgAlt: "Löwenzahn Samen",
-        text: "Hervorragend! Du hast alle Stationen des Lernpfads durchlaufen und die wesentlichen Verbreitungsformen kennengelernt.",
-        question: null
-      }
-    ];
+      const questions = document.querySelectorAll('.question-block');
 
-    let currentStation = 0;
+      questions.forEach((block) => {
+        const selectedOption = block.querySelector('input[type="radio"]:checked');
+        const correctAnswer = block.dataset.correct;
+        const hint = block.dataset.hint || 'Leider falsch. Versuche es nochmal!';
+        const feedbackEl = block.querySelector('.feedback');
 
-    function renderStation() {
-      const app = document.getElementById("app");
-      const station = stationen[currentStation];
+        // Reset Feedback-Klassen
+        feedbackEl.className = 'feedback';
 
-      // Fortschrittsbalken aktualisieren
-      const progressPercent = ((currentStation + 1) / stationen.length) * 100;
-      document.getElementById("progress").style.width = `${progressPercent}%`;
-
-      let html = `
-        <div class="station-card active">
-          <h2>${station.title}</h2>
-          <p>${station.text}</p>
-          <div class="media-container">
-            <img src="${station.img}" alt="${station.imgAlt}">
-          </div>
-      `;
-
-      if (station.question) {
-        html += `
-          <div class="task-box">
-            <strong>Aufgabe:</strong> ${station.question}
-            <div class="options-grid">
-              ${station.options.map((opt, index) => `
-                <button class="option-btn" onclick="checkAnswer(this, ${index})">
-                  ${opt.text}
-                </button>
-              `).join('')}
-            </div>
-            <div id="feedback-box" class="feedback-box"></div>
-          </div>
-        `;
-      }
-
-      html += `</div>`;
-      app.innerHTML = html;
-
-      // Buttons anpassen
-      document.getElementById("prev-btn").disabled = currentStation === 0;
-      
-      const nextBtn = document.getElementById("next-btn");
-      if (currentStation === stationen.length - 1) {
-        nextBtn.innerText = "Neustart";
-      } else {
-        nextBtn.innerText = "Weiter";
-      }
-    }
-
-    // Antwort prüfen ohne die Seite neu zu rendern (verhindert das Springen)
-    function checkAnswer(clickedBtn, optionIndex) {
-      const station = stationen[currentStation];
-      const selectedOption = station.options[optionIndex];
-      const feedbackBox = document.getElementById("feedback-box");
-      const allButtons = clickedBtn.parentElement.querySelectorAll(".option-btn");
-
-      if (selectedOption.correct) {
-        // Richtig ausgewählt: Button grün machen, alle Buttons sperren
-        allButtons.forEach(btn => btn.disabled = true);
-        clickedBtn.classList.add("correct");
-        
-        feedbackBox.className = "feedback-box correct-fb";
-        feedbackBox.innerText = selectedOption.feedback;
-      } else {
-        // Falsch ausgewählt: Nur diesen Button als rot markieren und deaktivieren
-        clickedBtn.classList.add("wrong");
-        clickedBtn.disabled = true;
-        
-        feedbackBox.className = "feedback-box wrong-fb";
-        feedbackBox.innerText = selectedOption.feedback;
-      }
-    }
-
-    function changeStation(direction) {
-      currentStation += direction;
-
-      if (currentStation >= stationen.length) {
-        currentStation = 0;
-      }
-
-      renderStation();
-      // Sanftes Scrollen nach oben beim Wechsel der Station
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // Start beim Laden
-    document.addEventListener("DOMContentLoaded", renderStation);
+        if (!selectedOption) {
+          feedbackEl.textContent = 'Bitte wähle eine Antwort aus.';
+          feedbackEl.classList.add('incorrect');
+        } else if (selectedOption.value === correctAnswer) {
+          feedbackEl.textContent = 'Richtig!';
+          feedbackEl.classList.add('correct');
+        } else {
+          feedbackEl.textContent = `Falsch. ${hint}`;
+          feedbackEl.classList.add('incorrect');
+        }
+      });
+    });
   </script>
+
 </body>
 </html>
