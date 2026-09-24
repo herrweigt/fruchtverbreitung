@@ -12,6 +12,8 @@
       --card-bg: #ffffff;
       --text: #2c3e50;
       --accent: #e8f5e9;
+      --error-bg: #ffebee;
+      --error-border: #c62828;
     }
 
     body {
@@ -34,7 +36,7 @@
 
     header {
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
       border-bottom: 2px solid var(--accent);
       padding-bottom: 15px;
     }
@@ -46,16 +48,15 @@
     }
 
     .progress-bar {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 30px;
+      height: 10px;
       background: #e0e0e0;
       border-radius: 10px;
       overflow: hidden;
+      margin-bottom: 25px;
     }
 
     .progress-fill {
-      height: 10px;
+      height: 100%;
       background: var(--primary);
       width: 0%;
       transition: width 0.3s ease;
@@ -84,10 +85,10 @@
 
     .task-box {
       background: var(--accent);
-      padding: 15px 20px;
+      padding: 20px;
       border-radius: 8px;
       margin: 20px 0;
-      border-left: 4px solid var(--primary);
+      border-left: 5px solid var(--primary);
     }
 
     .options-grid {
@@ -99,29 +100,54 @@
     button.option-btn {
       background: white;
       border: 2px solid #ccc;
-      padding: 12px;
+      padding: 12px 15px;
       border-radius: 6px;
       cursor: pointer;
       font-size: 1rem;
       text-align: left;
       transition: all 0.2s ease;
+      color: var(--text);
     }
 
-    button.option-btn:hover {
+    button.option-btn:hover:not(:disabled) {
       border-color: var(--primary);
       background: #f9f9f9;
     }
 
     button.option-btn.correct {
-      background: #c8e6c9;
-      border-color: #2e7d32;
+      background: #c8e6c9 !important;
+      border-color: #2e7d32 !important;
       color: #1b5e20;
+      font-weight: bold;
     }
 
     button.option-btn.wrong {
-      background: #ffcdd2;
-      border-color: #c62828;
+      background: var(--error-bg) !important;
+      border-color: var(--error-border) !important;
       color: #b71c1c;
+      opacity: 0.7;
+    }
+
+    .feedback-box {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 6px;
+      display: none;
+      font-weight: 500;
+    }
+
+    .feedback-box.correct-fb {
+      display: block;
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .feedback-box.wrong-fb {
+      display: block;
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
     }
 
     .nav-buttons {
@@ -149,11 +175,6 @@
       background: #ccc;
       cursor: not-allowed;
     }
-
-    .feedback {
-      margin-top: 10px;
-      font-weight: bold;
-    }
   </style>
 </head>
 <body>
@@ -179,15 +200,13 @@
   </div>
 
   <script>
-    // Platzhalter für deine Bild-Strings (Base64 oder URLs)
-    const HASEL_IMG = "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=600&q=80";
+    // Beispiel-Bilder
     const AHORN_IMG = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80";
-    const LOEWENZAHN_FLY_IMG = "https://images.unsplash.com/photo-1533038590840-1cde6e668a91?auto=format&fit=crop&w=600&q=80";
-    const BIRKENSAMEN_IMG = "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=600&q=80";
     const BEEREN_IMG = "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?auto=format&fit=crop&w=600&q=80";
     const KOKOSNUSS_IMG = "https://images.unsplash.com/photo-1543716627-839b54c40519?auto=format&fit=crop&w=600&q=80";
+    const LOEWENZAHN_FLY_IMG = "https://images.unsplash.com/photo-1533038590840-1cde6e668a91?auto=format&fit=crop&w=600&q=80";
 
-    // Datenstruktur aller Lernstationen
+    // Stationen-Daten mit individuellen Rückmeldungen / Tipps für jede Antwort
     const stationen = [
       {
         title: "Station 1: Windverbreitung (Anemochorie)",
@@ -196,9 +215,21 @@
         text: "Manche Pflanzen nutzen den Wind, um ihre Samen über weite Strecken zu transportieren. Diese Samen besitzen oft spezielle Flugeinrichtungen wie Flügel oder Haarkronen.",
         question: "Welche Ausstattungsmerkmale helfen Samen bei der Windverbreitung?",
         options: [
-          { text: "Saftiges Fruchtfleisch und auffällige Farben", correct: false },
-          { text: "Geringes Gewicht, Flügel oder Fallschirme", correct: true },
-          { text: "Wasserdichte Hülle und Hohlräume", correct: false }
+          { 
+            text: "Saftiges Fruchtfleisch und auffällige Farben", 
+            correct: false, 
+            feedback: "💡 Tipp: Bunte Farben und saftiges Fleisch locken eher Tiere an, die die Frucht fressen. Der Wind braucht etwas Leichtes!" 
+          },
+          { 
+            text: "Geringes Gewicht, Flügel oder Fallschirme", 
+            correct: true, 
+            feedback: "Richtig! Durch das geringe Gewicht und die große Fläche kann der Wind die Samen weit tragen." 
+          },
+          { 
+            text: "Wasserdichte Hülle und Hohlräume", 
+            correct: false, 
+            feedback: "💡 Tipp: Eine wasserdichte Hülle hilft beim Schwimmen im Wasser, nützt dem Wind aber wenig." 
+          }
         ]
       },
       {
@@ -208,9 +239,21 @@
         text: "Viele Pflanzen locken Tiere mit schmackhaften Früchten an. Die Samen werden entweder gefressen und unverdaut ausgeschieden oder bleiben mit Kletten im Fell hängen.",
         question: "Wie verbreiten Eichhörnchen beispielsweise die Samen der Haselnuss?",
         options: [
-          { text: "Sie fressen die Schale und spucken den Kern aus.", correct: false },
-          { text: "Sie vergraben Nüsse als Vorrat und vergessen einige davon.", correct: true },
-          { text: "Die Nüsse bleiben an ihrem Fell kleben.", correct: false }
+          { 
+            text: "Sie fressen die Schale und spucken den Kern aus.", 
+            correct: false, 
+            feedback: "💡 Tipp: Eichhörnchen fressen genau den nahrhaften Kern! Bedenke, was sie für den Winter vorbereiten." 
+          },
+          { 
+            text: "Sie vergraben Nüsse als Vorrat und vergessen einige davon.", 
+            correct: true, 
+            feedback: "Richtig! Aus den vergrabenen und vergesellschafteten Nüssen können im Frühjahr neue Bäume wachsen." 
+          },
+          { 
+            text: "Die Nüsse bleiben an ihrem Fell kleben.", 
+            correct: false, 
+            feedback: "💡 Tipp: Glatte Haselnüsse haben keine Widerhaken oder Kletten. Sie bleiben nicht im Fell haften." 
+          }
         ]
       },
       {
@@ -220,9 +263,21 @@
         text: "Pflanzen an Gewässern nutzen Strömungen zur Ausbreitung. Ihre Früchte müssen schwimmfähig und gegen Wasser geschützt sein.",
         question: "Was macht die Kokosnuss perfekt für die Wasserverbreitung?",
         options: [
-          { text: "Eine luftgefüllte, faserige Hülle, die Auftrieb gibt.", correct: true },
-          { text: "Kleine Flügel an der Außenseite.", correct: false },
-          { text: "Süßer Saft, der Fische anlockt.", correct: false }
+          { 
+            text: "Eine luftgefüllte, faserige Hülle, die Auftrieb gibt.", 
+            correct: true, 
+            feedback: "Richtig! Die faserige Hülle schließt Luft ein und sorgt dafür, dass die schwere Nuss monatelang im Meer schwimmen kann." 
+          },
+          { 
+            text: "Kleine Flügel an der Außenseite.", 
+            correct: false, 
+            feedback: "💡 Tipp: Flügel nützen im Wasser nichts und würden die Nuss nur bremsen." 
+          },
+          { 
+            text: "Süßer Saft, der Fische anlockt.", 
+            correct: false, 
+            feedback: "💡 Tipp: Fische fressen keine Kokosnüsse. Es geht darum, über das Wasser an neue Strände zu gelangen." 
+          }
         ]
       },
       {
@@ -244,7 +299,6 @@
       const progressPercent = ((currentStation + 1) / stationen.length) * 100;
       document.getElementById("progress").style.width = `${progressPercent}%`;
 
-      // HTML der aktuellen Station aufbauen
       let html = `
         <div class="station-card active">
           <h2>${station.title}</h2>
@@ -260,12 +314,12 @@
             <strong>Aufgabe:</strong> ${station.question}
             <div class="options-grid">
               ${station.options.map((opt, index) => `
-                <button class="option-btn" onclick="checkAnswer(this, ${opt.correct})">
+                <button class="option-btn" onclick="checkAnswer(this, ${index})">
                   ${opt.text}
                 </button>
               `).join('')}
             </div>
-            <div class="feedback" id="feedback"></div>
+            <div id="feedback-box" class="feedback-box"></div>
           </div>
         `;
       }
@@ -273,7 +327,7 @@
       html += `</div>`;
       app.innerHTML = html;
 
-      // Buttons aktivieren / deaktivieren
+      // Buttons anpassen
       document.getElementById("prev-btn").disabled = currentStation === 0;
       
       const nextBtn = document.getElementById("next-btn");
@@ -284,21 +338,27 @@
       }
     }
 
-    function checkAnswer(button, isCorrect) {
-      const parent = button.parentElement;
-      const buttons = parent.querySelectorAll(".option-btn");
-      const feedback = document.getElementById("feedback");
+    // Antwort prüfen ohne die Seite neu zu rendern (verhindert das Springen)
+    function checkAnswer(clickedBtn, optionIndex) {
+      const station = stationen[currentStation];
+      const selectedOption = station.options[optionIndex];
+      const feedbackBox = document.getElementById("feedback-box");
+      const allButtons = clickedBtn.parentElement.querySelectorAll(".option-btn");
 
-      buttons.forEach(btn => btn.disabled = true);
-
-      if (isCorrect) {
-        button.classList.add("correct");
-        feedback.style.color = "#2e7d32";
-        feedback.innerText = "Richtig gelöst!";
+      if (selectedOption.correct) {
+        // Richtig ausgewählt: Button grün machen, alle Buttons sperren
+        allButtons.forEach(btn => btn.disabled = true);
+        clickedBtn.classList.add("correct");
+        
+        feedbackBox.className = "feedback-box correct-fb";
+        feedbackBox.innerText = selectedOption.feedback;
       } else {
-        button.classList.add("wrong");
-        feedback.style.color = "#c62828";
-        feedback.innerText = "Leider nicht richtig. Versuche es bei der nächsten Station erneut!";
+        // Falsch ausgewählt: Nur diesen Button als rot markieren und deaktivieren
+        clickedBtn.classList.add("wrong");
+        clickedBtn.disabled = true;
+        
+        feedbackBox.className = "feedback-box wrong-fb";
+        feedbackBox.innerText = selectedOption.feedback;
       }
     }
 
@@ -310,9 +370,11 @@
       }
 
       renderStation();
+      // Sanftes Scrollen nach oben beim Wechsel der Station
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Initiales Rendern beim Laden der Seite
+    // Start beim Laden
     document.addEventListener("DOMContentLoaded", renderStation);
   </script>
 </body>
